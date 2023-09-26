@@ -69,7 +69,10 @@ class StickerState {
 
 
 //Вспомогательные  методы
-  //String stickerPrice(Sticker sticker) {}
+  String stickerPrice(Sticker sticker) {
+    return (sticker.quantity * sticker.price).toString();
+  }
+
 
   //double get subtotal {}
 
