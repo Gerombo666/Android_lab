@@ -44,9 +44,14 @@ class StickerState {
     }
   }
 
-  Future<void> onIncreaseQuantityTap(Sticker sticker) async {}
+  Future<void> onIncreaseQuantityTap(Sticker sticker) async {
+    sticker.quantity++;
+  }
 
-  Future<void> onDecreaseQuantityTap(Sticker sticker) async {}
+  Future<void> onDecreaseQuantityTap(Sticker sticker) async {
+    if (sticker.quantity == 1) return;
+    sticker.quantity--;
+  }
 
   Future<void> onAddToCartTap(Sticker sticker) async {}
 

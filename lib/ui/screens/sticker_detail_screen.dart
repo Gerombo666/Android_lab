@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../data/_data.dart';
+import '../../states/sticker_state.dart';
 import '../../ui_kit/_ui_kit.dart';
 import '../widgets/_widgets.dart';
 
@@ -17,6 +18,18 @@ class StickerDetail extends StatefulWidget {
 
 class StickerDetailState extends State<StickerDetail> {
   late final sticker = widget.sticker;
+
+  void onIncreaseQuantityTap() async {
+    print('Увеличить количество');
+    await StickerState().onIncreaseQuantityTap(sticker);
+    setState(() {});
+  }
+
+  void onDecreaseQuantityTap() async {
+    print('Уменьшить количество');
+    await StickerState().onDecreaseQuantityTap(sticker);
+    setState(() {});
+  }
 
 
   @override
@@ -110,8 +123,8 @@ class StickerDetailState extends State<StickerDetail> {
                                 style: Theme.of(context).textTheme.displayLarge?.copyWith(color: AppColor.accent),
                               ),
                               CounterButton(
-                                onIncrementTap: () {},
-                                onDecrementTap: () {},
+                                onIncrementTap: onIncreaseQuantityTap,
+                                onDecrementTap: onDecreaseQuantityTap,
                                 label: Text(
                                   sticker.quantity.toString(),
                                   style: Theme.of(context).textTheme.displayLarge,
