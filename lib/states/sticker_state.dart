@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../data/_data.dart';
 import '../ui/_ui.dart';
@@ -27,14 +27,21 @@ class StickerState {
 
 
 //Действия
-  Future<void> onCategoryTap(StickerCategory category) async {
-    categories.map((e) {
-      if (e.type == category.type) {
-        e.isSelected = true;
+  Future<void> onCategoryTap(StickerCategory tapedCategory) async {
+    categories.map((category) {
+      if (category.type == tapedCategory.type) {
+        category.isSelected = true;
       } else {
-        e.isSelected = false;
+        category.isSelected = false;
       }
     }).toList();
+
+    if (tapedCategory.type == StickerType.all) {
+      stickersByCategory = stickers;
+    } else {
+      stickersByCategory = stickers.where((category) =>
+      category.type == tapedCategory.type).toList();
+    }
   }
 
   Future<void> onIncreaseQuantityTap(Sticker sticker) async {}
