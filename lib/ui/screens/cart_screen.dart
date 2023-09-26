@@ -31,6 +31,11 @@ class CartScreenState extends State<CartScreen> {
     setState(() {});
   }
 
+  void onRemoveFromCartTap(Sticker sticker) async {
+    await StickerState().onRemoveFromCartTap(sticker);
+    setState(() {});
+  }
+
 
 
   @override
@@ -65,6 +70,7 @@ class CartScreenState extends State<CartScreen> {
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
             if (direction == DismissDirection.endToStart) {
+              onRemoveFromCartTap(sticker);
               print('Удаляем');
             }
           },
