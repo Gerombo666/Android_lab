@@ -74,7 +74,14 @@ class StickerState {
   }
 
 
-  //double get subtotal {}
+  double get subtotal {
+    double amount = 0.0;
+    for (var element in cart) {
+      amount = amount + element.price * element.quantity;
+    }
+    return amount;
+  }
+
 
 
 
