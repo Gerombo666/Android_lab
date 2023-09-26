@@ -7,14 +7,17 @@ import '../../ui_kit/_ui_kit.dart';
 import '../widgets/_widgets.dart';
 
 class StickerDetail extends StatefulWidget {
-  const StickerDetail({super.key});
+  const StickerDetail({super.key, required this.sticker});
+  final Sticker sticker;
+
 
   @override
   State<StickerDetail> createState() => StickerDetailState();
 }
 
 class StickerDetailState extends State<StickerDetail> {
-  final sticker = AppData.stickers[0];
+  late final sticker = widget.sticker;
+
 
   @override
   Widget build(BuildContext context) {
