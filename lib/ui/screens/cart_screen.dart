@@ -16,6 +16,16 @@ class CartScreen extends StatefulWidget {
 class CartScreenState extends State<CartScreen> {
   List<Sticker> get cartItems => StickerState().cart;
 
+  void update() {
+    setState(() {});
+  }
+/*
+  void onAddToCartTap() {
+    StickerState().onAddToCartTap(sticker);
+  }
+*/
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +35,7 @@ class CartScreenState extends State<CartScreen> {
         isEmpty: cartItems.isEmpty,
         child: _cartListView(),
       ),
-      bottomNavigationBar: _bottomAppBar(),
+      bottomNavigationBar: cartItems.isEmpty? const SizedBox.shrink() :_bottomAppBar(),
     );
   }
 

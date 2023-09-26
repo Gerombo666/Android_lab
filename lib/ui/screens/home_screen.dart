@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../data/_data.dart';
+import '../../states/sticker_state.dart';
 import '../_ui.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,7 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  final List<Widget> screens = [const StickerList(), const CartScreen(), const FavoriteScreen(), const ProfileScreen()];
+  final List<Widget> screens = [const StickerList(),     CartScreen(
+    key: StickerState().cartKey,), const FavoriteScreen(), const ProfileScreen()];
   int currentIndex = 0;
 
   void onTabTap(int index) {

@@ -53,7 +53,11 @@ class StickerState {
     sticker.quantity--;
   }
 
-  Future<void> onAddToCartTap(Sticker sticker) async {}
+  Future<void> onAddToCartTap(Sticker sticker) async {
+    debugPrint('Добавляем стикер в корзину');
+    sticker.cart = true;
+    cartKey.currentState?.update();
+  }
 
   Future<void> onRemoveFromCartTap(Sticker sticker) async {}
 

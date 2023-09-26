@@ -149,7 +149,7 @@ class StickerDetailState extends State<StickerDetail> {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 30),
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed:  () => StickerState().onAddToCartTap(sticker),
                                 child: const Text("Add to cart"),
                               ),
                             ),
