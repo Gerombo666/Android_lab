@@ -64,7 +64,12 @@ class StickerState {
     sticker.quantity = 1;
   }
 
-  Future<void> onCheckOutTap() async {}
+  Future<void> onCheckOutTap() async {
+    for (var element in cart) {
+      element.cart = false;
+      element.quantity = 1;
+    }
+  }
 
   Future<void> onAddRemoveFavoriteTap(Sticker sticker) async{}
 

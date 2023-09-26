@@ -36,6 +36,10 @@ class CartScreenState extends State<CartScreen> {
     setState(() {});
   }
 
+  void onCheckOutTap() async {
+    await StickerState().onCheckOutTap();
+    setState(() {});
+  }
 
 
   @override
@@ -225,7 +229,7 @@ class CartScreenState extends State<CartScreen> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: onCheckOutTap,
                               child: const Text("Checkout"),
                             ),
                           ),
