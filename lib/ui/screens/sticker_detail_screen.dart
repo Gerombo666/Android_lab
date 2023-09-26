@@ -19,6 +19,19 @@ class StickerDetail extends StatefulWidget {
 class StickerDetailState extends State<StickerDetail> {
   late final sticker = widget.sticker;
 
+  bool isOpenCart = false;
+
+  //Todo: Favorite добавление и удаление
+  /*
+  //int get stickerId => StickerState().selectedStickerId;
+  //Sticker get sticker => StickerState().stickerById(stickerId);
+
+  int get stickerId => StickerState().selectedStickerId;
+  Sticker get sticker =>
+      StickerState().stickerById(stickerId);
+  late int _quantity = sticker.quantity;
+  */
+
   void onIncreaseQuantityTap() async {
     print('Увеличить количество');
     await StickerState().onIncreaseQuantityTap(sticker);
@@ -30,6 +43,63 @@ class StickerDetailState extends State<StickerDetail> {
     await StickerState().onDecreaseQuantityTap(sticker);
     setState(() {});
   }
+
+  //Todo: Favorite добавление и удаление
+  /*
+  void onAddDeleteFavoriteTap() async {
+    await
+    StickerState().onAddDeleteFavoriteTap(stickerId);
+    setState(() {});
+  }
+  */
+
+  Future<void> _showDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Sticker added to cart'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const[
+                Text('Do you want open cart?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'No',
+                style:TextStyle(color:AppColor.accent),),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Yes',
+                style:TextStyle(color: AppColor.accent),),
+              onPressed: () {
+                isOpenCart = true;
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onAddToCartTap() async {
+    await StickerState().onAddToCartTap(sticker);
+    await _showDialog();
+    if (isOpenCart) {
+      isOpenCart = false;
+
+  }
+  }
+
 
 
   @override

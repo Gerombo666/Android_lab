@@ -23,7 +23,7 @@ class StickerState {
   List<Sticker> stickersByCategory = AppData.stickers;
   List<Sticker> get cart => stickers.where((element) => element.cart).toList();
   List<Sticker> get favorite => stickers.where((element) => element.isFavorite).toList();
-  ValueNotifier<bool> isLigth = ValueNotifier(true);
+  ValueNotifier<bool> isLight = ValueNotifier(true);
 
 
 //Действия
@@ -71,7 +71,27 @@ class StickerState {
     }
   }
 
-  Future<void> onAddRemoveFavoriteTap(Sticker sticker) async{}
+  Future<void> onAddRemoveFavoriteTap(Sticker sticker) async{
+    //Todo: Favorite и удаление
+    //sticker.isFavorite = !sticker.isFavorite;
+    //favoriteKey.currentState?.update();
+  }
+
+  //Todo: Favorite добавление и удаление
+  /*
+  Future<void> onAddDeleteFavoriteTap(int id) async {
+
+    if (favoriteIds.contains(id)) {
+      favoriteIds.remove(id);
+    } else {
+      favoriteIds.add(id);
+    }
+    final sticker = stickerById(id);
+    sticker.isFavorite = !sticker.isFavorite;
+  }
+  */
+
+
 
   void toggleTheme() {}
 
