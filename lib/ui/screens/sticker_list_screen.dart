@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sun_stickers/ui/_ui.dart';
 
 import '../../data/_data.dart';
+import '../../states/sticker_state.dart';
 import '../../ui_kit/_ui_kit.dart';
 
 class StickerList extends StatefulWidget {
@@ -14,7 +15,7 @@ class StickerList extends StatefulWidget {
 }
 
 class StickerListState extends State<StickerList> {
-  var categories = AppData.categories;
+  var categories = StickerState().categories;
 
   void onCategoryTap(int selectedIndex) {
     //Меняем выбранную категорию
@@ -47,7 +48,7 @@ class StickerListState extends State<StickerList> {
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 _categories(),
-                StickerListView(stickers: AppData.stickers),
+                StickerListView(stickers: StickerState().stickersByCategory),
                 Padding(
                   padding: const EdgeInsets.only(top: 25, bottom: 5),
                   child: Row(
@@ -68,7 +69,7 @@ class StickerListState extends State<StickerList> {
                   ),
                 ),
                 StickerListView(
-                  stickers: AppData.stickers,
+                  stickers: StickerState().stickers,
                   isReversed: true,
                 ),
               ],
