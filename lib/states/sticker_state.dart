@@ -27,7 +27,15 @@ class StickerState {
 
 
 //Действия
-  Future<void> onCategoryTap(StickerCategory category) async {}
+  Future<void> onCategoryTap(StickerCategory category) async {
+    categories.map((e) {
+      if (e.type == category.type) {
+        e.isSelected = true;
+      } else {
+        e.isSelected = false;
+      }
+    }).toList();
+  }
 
   Future<void> onIncreaseQuantityTap(Sticker sticker) async {}
 

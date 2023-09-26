@@ -17,6 +17,7 @@ class StickerList extends StatefulWidget {
 class StickerListState extends State<StickerList> {
   var categories = StickerState().categories;
 
+  /*
   void onCategoryTap(int selectedIndex) {
     //Меняем выбранную категорию
     categories.asMap().forEach((index, category) {
@@ -24,6 +25,13 @@ class StickerListState extends State<StickerList> {
     });
     setState(() {});
   }
+  */
+
+  void onCategoryTap(StickerCategory category) async {
+    await StickerState().onCategoryTap(category);
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -134,7 +142,7 @@ class StickerListState extends State<StickerList> {
               final category = categories[index];
               return GestureDetector(
                 onTap: () {
-                  onCategoryTap(index);
+                  onCategoryTap(categories[index]);
                 },
                 child: Container(
                   width: 100,
