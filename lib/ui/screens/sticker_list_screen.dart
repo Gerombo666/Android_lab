@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sun_stickers/states/shared_cubit/_shared_cubit.dart';
 import 'package:sun_stickers/ui/_ui.dart';
 
 import '../../data/_data.dart';
@@ -40,7 +41,7 @@ class StickerList extends StatelessWidget {
                   builder: (context) {
                     debugPrint('StickerList >> Фильтрация категорий');
                     //final stickersByCategory = context.watch<SharedBloc>().state.stickersByCategory;
-                    final stickersByCategory = context.select((SharedBloc b) => b.state.stickersByCategory);
+                    final stickersByCategory = context.select((SharedCubit b) => b.state.stickersByCategory);
                     return StickerListView(stickers: stickersByCategory);
                   }
                 ),
@@ -66,7 +67,7 @@ class StickerList extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     debugPrint('StickerList >> Лучшие предложения недели');
-                    final stickers = context.watch<SharedBloc>().state.stickers;
+                    final stickers = context.watch<SharedCubit>().state.stickers;
                     return StickerListView(
                       stickers: stickers,
                       isReversed: true,
@@ -83,7 +84,7 @@ class StickerList extends StatelessWidget {
     return AppBar(
       leading: IconButton(
         icon: const FaIcon(FontAwesomeIcons.dice),
-        onPressed: () => context.read<SharedBloc>().add(ToggleThemeTabEvent()),
+        onPressed: () => context.read<SharedCubit>().onToggleThemeTab(),
       ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +132,7 @@ class StickerList extends StatelessWidget {
         height: 40,
         child: Builder(
           builder: (context) {
-            final categories = context.watch<SharedBloc>().state.categories;
+            final categories = context.watch<SharedCubit>().state.categories;
             debugPrint('StickerList >> Подсветка выбранной категории');
             //final categories = context.select((SharedBloc b) => b.state.categories);
             return ListView.separated(
@@ -140,7 +141,7 @@ class StickerList extends StatelessWidget {
                   final category = categories[index];
                   return GestureDetector(
                     onTap: (){
-                      context.read<SharedBloc>().add(CategoryTapEvent(category));
+                      context.read<SharedCubit>().onCategoryTap(category);
                     },
                     child: Container(
                       width: 100,

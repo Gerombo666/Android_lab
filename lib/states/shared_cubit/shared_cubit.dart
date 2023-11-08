@@ -5,43 +5,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sun_stickers/data/_data.dart';
 
 
-part 'shared_event.dart';
+
 part 'shared_state.dart';
 
-class SharedBloc extends Bloc<SharedEvent, SharedState> {
-  SharedBloc() : super(SharedState.initial()) {
-    on<CategoryTapEvent>(_onCategoryTap);
-    on<IncreaseQuantityTapEvent>(_onIncreaseQuantityTap);
-    on<DecreaseQuantityTapEvent>(_onDecreaseQuantityTap);
-    on<AddToCartTapEvent>(_onAddToCartTap);
-    on<RemoveFromCartTapEvent>(_onRemoveFromCartTap);
-    on<CheckOutTapEvent>(_onCheckOutTap);
-    on<AddRemoveFavoriteTapEvent>(_onAddRemoveFavoriteTap);
-    on<ToggleThemeTabEvent>(_onToggleThemeTab);
-  }
+class SharedCubit extends Cubit<SharedState> {
+  SharedCubit() : super(SharedState.initial());
 
-  void _onCategoryTap(CategoryTapEvent event, Emitter<SharedState>  emit){
+  void onCategoryTap(StickerCategory category){
     final List<StickerCategory> categories = state.categories.map((e) {
-      if (e.type == event.category.type) {
+      if (e.type == category.type) {
         return e.copyWith(isSelected: true);
       } else {
         return e.copyWith(isSelected: false);
       }
     }).toList();
-    if (event.category.type == StickerType.all) {
+    if (category.type == StickerType.all) {
       emit(state.copyWith(categories: categories, stickersByCategory: state.stickers));
     } else {
       final List<Sticker> stickersByCategory = state.stickers
-          .where((e) => e.type == event.category.type)
+          .where((e) => e.type == category.type)
           .toList();
       emit(state.copyWith(categories: categories, stickersByCategory: stickersByCategory));
     }
   }
 
 
-  void _onIncreaseQuantityTap(IncreaseQuantityTapEvent event, Emitter<SharedState> emit) {
+  void onIncreaseQuantityTap(int stickerId) {
     final List<Sticker> stickers = state.stickers.map((e) {
-      if (e.id == event.stickerId) {
+      if (e.id == stickerId) {
         return e.copyWith(quantity: e.quantity + 1);
       } else {
         return e;
@@ -50,9 +41,9 @@ class SharedBloc extends Bloc<SharedEvent, SharedState> {
     emit(state.copyWith(stickers: stickers));
   }
 
-  void _onDecreaseQuantityTap(DecreaseQuantityTapEvent event, Emitter<SharedState> emit) {
+  void onDecreaseQuantityTap(int stickerId) {
     final List<Sticker> stickers = state.stickers.map((e) {
-      if (e.id == event.stickerId) {
+      if (e.id == stickerId) {
         return e.quantity == 1 ? e : e.copyWith(quantity: e.quantity - 1);
       } else {
         return e;
@@ -61,9 +52,9 @@ class SharedBloc extends Bloc<SharedEvent, SharedState> {
     emit(state.copyWith(stickers: stickers));
   }
 
-  void _onAddToCartTap(AddToCartTapEvent event, Emitter<SharedState> emit){
+  void onAddToCartTap(int stickerId){
     final List<Sticker> stickers = state.stickers.map((e) {
-      if (e.id == event.stickerId) {
+      if (e.id == stickerId) {
         return e.copyWith(cart: true);
       } else {
         return e;
@@ -72,9 +63,9 @@ class SharedBloc extends Bloc<SharedEvent, SharedState> {
     emit(state.copyWith(stickers: stickers));
   }
 
-  void _onRemoveFromCartTap(RemoveFromCartTapEvent event, Emitter<SharedState> emit){
+  void onRemoveFromCartTap(int stickerId){
     final List<Sticker> stickers = state.stickers.map((e) {
-      if (e.id == event.stickerId) {
+      if (e.id == stickerId) {
         return e.copyWith(cart: false, quantity: 1);
       } else {
         return e;
@@ -83,7 +74,7 @@ class SharedBloc extends Bloc<SharedEvent, SharedState> {
     emit(state.copyWith(stickers: stickers));
   }
 
-  void _onCheckOutTap(CheckOutTapEvent event, Emitter<SharedState> emit) {
+  void onCheckOutTap() {
     List<Sticker> stickers = <Sticker>[];
     Set<int> cartIds = <int>{};
     for (var item in cart) {
@@ -99,9 +90,9 @@ class SharedBloc extends Bloc<SharedEvent, SharedState> {
     emit(state.copyWith(stickers: stickers));
   }
 
-  void _onAddRemoveFavoriteTap(AddRemoveFavoriteTapEvent event, Emitter<SharedState> emit){
+  void onAddRemoveFavoriteTap(int stickerId){
     final List<Sticker> stickers = state.stickers.map((e) {
-      if (e.id == event.stikerId) {
+      if (e.id == stickerId) {
         return e.copyWith(favorite: !e.favorite);
       } else {
         return e;
@@ -110,7 +101,7 @@ class SharedBloc extends Bloc<SharedEvent, SharedState> {
     emit(state.copyWith(stickers: stickers));
   }
 
-  void _onToggleThemeTab(ToggleThemeTabEvent event, Emitter<SharedState> emit){
+  void onToggleThemeTab(){
     emit(state.copyWith(isLight: !state.isLight));
   }
 

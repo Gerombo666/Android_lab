@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../data/_data.dart';
 import '../../states/_states.dart';
+import '../../states/shared_cubit/shared_cubit.dart';
 import '../../ui_kit/_ui_kit.dart';
 import '../_ui.dart';
 
@@ -15,7 +16,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final cartItems = context.watch<SharedBloc>().cart;
-    final cartItems = context.select((SharedBloc b) => b.cart);
+    final cartItems = context.select((SharedCubit b) => b.cart);
     //final cartItems = bloc.cart;
     debugPrint('CartScreen >> Перерисовка корзины');
     return Scaffold(
@@ -49,7 +50,7 @@ class CartScreen extends StatelessWidget {
           onDismissed: (direction) {
             if (direction == DismissDirection.endToStart) {
               print('Удаляем');
-              context.read<SharedBloc>().add(RemoveFromCartTapEvent(sticker.id));
+              context.read<SharedCubit>().onRemoveFromCartTap(sticker.id);
             }
           },
           key: UniqueKey(),
@@ -99,8 +100,8 @@ class CartScreen extends StatelessWidget {
                 Column(
                   children: [
                     CounterButton(
-                      onIncrementTap: () => context.read<SharedBloc>().add(IncreaseQuantityTapEvent(sticker.id)),
-                      onDecrementTap: () => context.read<SharedBloc>().add(DecreaseQuantityTapEvent(sticker.id)),
+                      onIncrementTap: () => context.read<SharedCubit>().onIncreaseQuantityTap(sticker.id),
+                      onDecrementTap: () => context.read<SharedCubit>().onDecreaseQuantityTap(sticker.id),
                       size: const Size(24, 24),
                       padding: 0,
                       label: Text(
@@ -109,7 +110,7 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "\$${context.read<SharedBloc>().stickerPrice(sticker)}",
+                      "\$${context.read<SharedCubit>().stickerPrice(sticker)}",
                       style: AppTextStyle.h2Style.copyWith(color: AppColor.accent),
                     )
                   ],
@@ -151,7 +152,7 @@ class CartScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.headlineSmall,
                               ),
                               Text(
-                                "\$${context.read<SharedBloc>().subtotal}",
+                                "\$${context.read<SharedCubit>().subtotal}",
                                 style: Theme.of(context).textTheme.displayMedium,
                               ),
                             ],
@@ -188,7 +189,7 @@ class CartScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.displayMedium,
                               ),
                               Text(
-                                "\$${context.read<SharedBloc>().subtotal + taxes}",
+                                "\$${context.read<SharedCubit>().subtotal + taxes}",
                                 style: AppTextStyle.h2Style.copyWith(
                                   color: AppColor.accent,
                                 ),
@@ -203,7 +204,7 @@ class CartScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: ElevatedButton(
-                              onPressed: () => context.read<SharedBloc>().add(CheckOutTapEvent()),
+                              onPressed: () => context.read<SharedCubit>().onCheckOutTap(),
                               child: const Text("Checkout"),
                             ),
                           ),

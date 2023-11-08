@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sun_stickers/states/_states.dart';
+import 'package:sun_stickers/states/shared_cubit/shared_cubit.dart';
 
 import 'ui/_ui.dart';
 import 'ui_kit/_ui_kit.dart';
@@ -16,11 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SharedBloc>(
-      create: (context) => SharedBloc(),
+    return BlocProvider<SharedCubit>(
+      create: (context) => SharedCubit(),
       child: Builder(
         builder: (context) {
-          final isLight = context.select((SharedBloc b) => b.state.isLight);
+          final isLight = context.select((SharedCubit b) => b.state.isLight);
           return MaterialApp(
             title: 'Sunny Stickers',
             theme: isLight ? AppTheme.lightTheme: AppTheme.darkTheme,

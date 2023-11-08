@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sun_stickers/states/_states.dart';
 
 import '../../data/_data.dart';
+import '../../states/shared_cubit/shared_cubit.dart';
 import '../../ui_kit/_ui_kit.dart';
 import '../widgets/_widgets.dart';
 
@@ -42,11 +43,11 @@ class StickerDetail extends StatelessWidget {
     debugPrint('StickerDetail >> Перерисовка экрана деталей');
     return Builder(
       builder: (context) {
-        final favorite = context.select((SharedBloc b) => b.getStickerById(sticker.id).favorite);
+        final favorite = context.select((SharedCubit b) => b.getStickerById(sticker.id).favorite);
         return FloatingActionButton(
           elevation: 0.0,
           backgroundColor: AppColor.accent,
-          onPressed: () => context.read<SharedBloc>().add(AddRemoveFavoriteTapEvent(sticker.id)),
+          onPressed: () => context.read<SharedCubit>().onAddRemoveFavoriteTap(sticker.id),
           child: favorite ? const Icon(AppIcon.heart) : const Icon(AppIcon.outlinedHeart),
         );
       }
@@ -111,13 +112,13 @@ class StickerDetail extends StatelessWidget {
                                 style: Theme.of(context).textTheme.displayLarge?.copyWith(color: AppColor.accent),
                               ),
                               CounterButton(
-                                onIncrementTap: () => context.read<SharedBloc>().add(IncreaseQuantityTapEvent(sticker.id)),
-                                onDecrementTap: () => context.read<SharedBloc>().add(DecreaseQuantityTapEvent(sticker.id)),
+                                onIncrementTap: () => context.read<SharedCubit>().onIncreaseQuantityTap(sticker.id),
+                                onDecrementTap: () => context.read<SharedCubit>().onDecreaseQuantityTap(sticker.id),
                                 label: Builder(
                                   builder: (context) {
                                     //final bloc = context.watch<SharedBloc>();
                                     //final quantity = context.watch<SharedBloc>().getStickerById(sticker.id).quantity;
-                                    final quantity = context.select((SharedBloc b) => b.getStickerById(sticker.id).quantity);
+                                    final quantity = context.select((SharedCubit b) => b.getStickerById(sticker.id).quantity);
                                     debugPrint('StickerDetail >> Управление количеством');
                                     return Text(
                                       quantity.toString(),
@@ -145,7 +146,7 @@ class StickerDetail extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 30),
                               child: ElevatedButton(
-                                onPressed: () => context.read<SharedBloc>().add(AddToCartTapEvent(sticker.id)),
+                                onPressed: () => context.read<SharedCubit>().onAddToCartTap(sticker.id),
                                 child: const Text("Add to cart"),
                               ),
                             ),
