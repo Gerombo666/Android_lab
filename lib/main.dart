@@ -18,10 +18,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<SharedBloc>(
       create: (context) => SharedBloc(),
-      child: MaterialApp(
-        title: 'Sunny Stickers',
-        theme: AppTheme.darkTheme,
-        home: const HomeScreen(),
+      child: Builder(
+        builder: (context) {
+          final isLight = context.select((SharedBloc b) => b.state.isLight);
+          return MaterialApp(
+            title: 'Sunny Stickers',
+            theme: isLight ? AppTheme.lightTheme: AppTheme.darkTheme,
+            home: const HomeScreen(),
+          );
+        }
       ),
     );
   }

@@ -39,8 +39,8 @@ class StickerList extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     debugPrint('StickerList >> Фильтрация категорий');
-                    final stickersByCategory = context.watch<SharedBloc>().state.stickersByCategory;
-                    //final stickersByCategory = context.select((SharedBloc b) => b.state.stickersByCategory);
+                    //final stickersByCategory = context.watch<SharedBloc>().state.stickersByCategory;
+                    final stickersByCategory = context.select((SharedBloc b) => b.state.stickersByCategory);
                     return StickerListView(stickers: stickersByCategory);
                   }
                 ),
@@ -83,7 +83,7 @@ class StickerList extends StatelessWidget {
     return AppBar(
       leading: IconButton(
         icon: const FaIcon(FontAwesomeIcons.dice),
-        onPressed: () {},
+        onPressed: () => context.read<SharedBloc>().add(ToggleThemeTabEvent()),
       ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -131,9 +131,9 @@ class StickerList extends StatelessWidget {
         height: 40,
         child: Builder(
           builder: (context) {
-            //final categories = context.watch<SharedBloc>().state.categories;
+            final categories = context.watch<SharedBloc>().state.categories;
             debugPrint('StickerList >> Подсветка выбранной категории');
-            final categories = context.select((SharedBloc b) => b.state.categories);
+            //final categories = context.select((SharedBloc b) => b.state.categories);
             return ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (_, index) {

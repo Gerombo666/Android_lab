@@ -15,6 +15,9 @@ class SharedBloc extends Bloc<SharedEvent, SharedState> {
     on<DecreaseQuantityTapEvent>(_onDecreaseQuantityTap);
     on<AddToCartTapEvent>(_onAddToCartTap);
     on<RemoveFromCartTapEvent>(_onRemoveFromCartTap);
+    on<CheckOutTapEvent>(_onCheckOutTap);
+    on<AddRemoveFavoriteTapEvent>(_onAddRemoveFavoriteTap);
+    on<ToggleThemeTabEvent>(_onToggleThemeTab);
   }
 
   void _onCategoryTap(CategoryTapEvent event, Emitter<SharedState>  emit){
@@ -59,20 +62,78 @@ class SharedBloc extends Bloc<SharedEvent, SharedState> {
   }
 
   void _onAddToCartTap(AddToCartTapEvent event, Emitter<SharedState> emit){
-
+    final List<Sticker> stickers = state.stickers.map((e) {
+      if (e.id == event.stickerId) {
+        return e.copyWith(cart: true);
+      } else {
+        return e;
+      }
+    }).toList();
+    emit(state.copyWith(stickers: stickers));
   }
 
   void _onRemoveFromCartTap(RemoveFromCartTapEvent event, Emitter<SharedState> emit){
-
+    final List<Sticker> stickers = state.stickers.map((e) {
+      if (e.id == event.stickerId) {
+        return e.copyWith(cart: false, quantity: 1);
+      } else {
+        return e;
+      }
+    }).toList();
+    emit(state.copyWith(stickers: stickers));
   }
 
+  void _onCheckOutTap(CheckOutTapEvent event, Emitter<SharedState> emit) {
+    List<Sticker> stickers = <Sticker>[];
+    Set<int> cartIds = <int>{};
+    for (var item in cart) {
+      cartIds.add(item.id);
+    }
+    stickers = state.stickers.map((e) {
+      if (cartIds.contains(e.id)) {
+        return e.copyWith(cart: false, quantity: 1);
+      } else {
+        return e;
+      }
+    }).toList();
+    emit(state.copyWith(stickers: stickers));
+  }
+
+  void _onAddRemoveFavoriteTap(AddRemoveFavoriteTapEvent event, Emitter<SharedState> emit){
+    final List<Sticker> stickers = state.stickers.map((e) {
+      if (e.id == event.stikerId) {
+        return e.copyWith(favorite: !e.favorite);
+      } else {
+        return e;
+      }
+    }).toList();
+    emit(state.copyWith(stickers: stickers));
+  }
+
+  void _onToggleThemeTab(ToggleThemeTabEvent event, Emitter<SharedState> emit){
+    emit(state.copyWith(isLight: !state.isLight));
+  }
+
+
   List<Sticker> get cart => state.stickers.where((e) => e.cart).toList();
-  List<Sticker> get factory => state.stickers.where((e) => e.favorite).toList();
+  List<Sticker> get favorite => state.stickers.where((e) => e.favorite).toList();
   int getIndex(int stickerId) {
     int index = state.stickers.indexWhere((e) => e.id == stickerId);
     return index;
   }
   Sticker getStickerById(int stickerId) {
     return state.stickers[getIndex(stickerId)];
+  }
+
+  String stickerPrice(Sticker sticker) {
+    return (sticker.quantity * sticker.price).toString();
+  }
+
+  double get subtotal {
+    double amount = 0.0;
+    for (var e in cart) {
+      amount = amount + e.price * e.quantity;
+    }
+    return amount;
   }
 }

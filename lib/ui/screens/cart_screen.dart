@@ -14,8 +14,9 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.watch<SharedBloc>();
-    final cartItems = bloc.cart;
+    //final cartItems = context.watch<SharedBloc>().cart;
+    final cartItems = context.select((SharedBloc b) => b.cart);
+    //final cartItems = bloc.cart;
     debugPrint('CartScreen >> Перерисовка корзины');
     return Scaffold(
       appBar: _appBar(context),
@@ -98,12 +99,8 @@ class CartScreen extends StatelessWidget {
                 Column(
                   children: [
                     CounterButton(
-                      onIncrementTap: () {
-                        print('Увеличить количество');
-                      },
-                      onDecrementTap: () {
-                        print('Уменьшить количество');
-                      },
+                      onIncrementTap: () => context.read<SharedBloc>().add(IncreaseQuantityTapEvent(sticker.id)),
+                      onDecrementTap: () => context.read<SharedBloc>().add(DecreaseQuantityTapEvent(sticker.id)),
                       size: const Size(24, 24),
                       padding: 0,
                       label: Text(
@@ -112,7 +109,7 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "\$10",
+                      "\$${context.read<SharedBloc>().stickerPrice(sticker)}",
                       style: AppTextStyle.h2Style.copyWith(color: AppColor.accent),
                     )
                   ],
@@ -154,7 +151,7 @@ class CartScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.headlineSmall,
                               ),
                               Text(
-                                "\$111",
+                                "\$${context.read<SharedBloc>().subtotal}",
                                 style: Theme.of(context).textTheme.displayMedium,
                               ),
                             ],
@@ -191,7 +188,7 @@ class CartScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.displayMedium,
                               ),
                               Text(
-                                "\$120.0",
+                                "\$${context.read<SharedBloc>().subtotal + taxes}",
                                 style: AppTextStyle.h2Style.copyWith(
                                   color: AppColor.accent,
                                 ),
@@ -206,7 +203,7 @@ class CartScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () => context.read<SharedBloc>().add(CheckOutTapEvent()),
                               child: const Text("Checkout"),
                             ),
                           ),

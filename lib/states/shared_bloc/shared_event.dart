@@ -32,3 +32,12 @@ class  RemoveFromCartTapEvent extends SharedEvent{
   final int stickerId;
 }
 
+class CheckOutTapEvent extends SharedEvent {}
+
+class AddRemoveFavoriteTapEvent extends SharedEvent{
+  AddRemoveFavoriteTapEvent(this.stikerId);
+  final int stikerId;
+}
+
+
+class ToggleThemeTabEvent extends SharedEvent{}

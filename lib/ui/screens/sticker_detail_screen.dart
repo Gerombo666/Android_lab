@@ -40,11 +40,16 @@ class StickerDetail extends StatelessWidget {
 
   Widget _floatingActionButton(BuildContext context) {
     debugPrint('StickerDetail >> Перерисовка экрана деталей');
-    return FloatingActionButton(
-      elevation: 0.0,
-      backgroundColor: AppColor.accent,
-      onPressed: () {},
-      child: sticker.favorite ? const Icon(AppIcon.heart) : const Icon(AppIcon.outlinedHeart),
+    return Builder(
+      builder: (context) {
+        final favorite = context.select((SharedBloc b) => b.getStickerById(sticker.id).favorite);
+        return FloatingActionButton(
+          elevation: 0.0,
+          backgroundColor: AppColor.accent,
+          onPressed: () => context.read<SharedBloc>().add(AddRemoveFavoriteTapEvent(sticker.id)),
+          child: favorite ? const Icon(AppIcon.heart) : const Icon(AppIcon.outlinedHeart),
+        );
+      }
     );
   }
 
