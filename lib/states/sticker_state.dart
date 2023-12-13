@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import '../data/_data.dart';
 import '../ui/_ui.dart';
 
-class StickerState {
-  StickerState._();
-  static final _instance = StickerState._();
-  factory StickerState() => _instance;
+class StickerState  with ChangeNotifier{
+  //StickerState._();
+  //static final _instance = StickerState._();
+  //factory StickerState() => _instance;
 
   //Переменные
   List<StickerCategory> categories = AppData.categories;
   List<Sticker> stickers = AppData.stickers;
   List<Sticker> stickersByCategory = AppData.stickers;
-  List<Sticker> cart = <Sticker>[];
-  List<Sticker> favorite = <Sticker>[];
+  // List<Sticker> cart = <Sticker>[];
+  // List<Sticker> favorite = <Sticker>[];
   bool light = true;
 
   //Действия
@@ -31,6 +31,7 @@ class StickerState {
     } else {
       stickersByCategory = stickers.where((e) => e.type == category.type).toList();
     }
+    notifyListeners();
   }
 
   Future<void> onIncreaseQuantityTap(int stickerId) async {
@@ -41,6 +42,7 @@ class StickerState {
         return e;
       }
     }).toList();
+    notifyListeners();
   }
 
   Future<void> onDecreaseQuantityTap(int stickerId) async {
@@ -51,6 +53,7 @@ class StickerState {
         return e;
       }
     }).toList();
+    notifyListeners();
   }
 
   Future<void> onAddToCartTap(int stickerId) async {
@@ -61,7 +64,8 @@ class StickerState {
         return e;
       }
     }).toList();
-    cart = stickers.where((e) => e.cart).toList();
+    //cart = stickers.where((e) => e.cart).toList();
+    notifyListeners();
   }
 
   Future<void> onRemoveFromCartTap(int stickerId) async {
@@ -72,7 +76,8 @@ class StickerState {
         return e;
       }
     }).toList();
-    cart = stickers.where((e) => e.cart).toList();
+    //cart = stickers.where((e) => e.cart).toList();
+    notifyListeners();
   }
 
   Future<void> onCheckOutTap() async {
@@ -87,7 +92,8 @@ class StickerState {
         return e;
       }
     }).toList();
-    cart = stickers.where((e) => e.cart).toList();
+    //cart = stickers.where((e) => e.cart).toList();
+    notifyListeners();
   }
 
   Future<void> onAddRemoveFavoriteTap(int stickerId) async {
@@ -98,15 +104,17 @@ class StickerState {
         return e;
       }
     }).toList();
-    favorite = stickers.where((e) => e.favorite).toList();
+    notifyListeners();
+    //favorite = stickers.where((e) => e.favorite).toList();
   }
 
   void toggleTheme() {
     light = !light;
+    notifyListeners();
   }
 
-  //List<Sticker> get cart => stickers.where((e) => e.cart).toList();
-  //List<Sticker> get favorite => stickers.where((e) => e.favorite).toList();
+  List<Sticker> get cart => stickers.where((e) => e.cart).toList();
+  List<Sticker> get favorite => stickers.where((e) => e.favorite).toList();
 
   int getIndex(int stickerId) {
     int index = stickers.indexWhere((e) => e.id == stickerId);

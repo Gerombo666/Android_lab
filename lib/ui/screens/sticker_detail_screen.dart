@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:sun_stickers/states/_states.dart';
 
 import '../../data/_data.dart';
 import '../../ui_kit/_ui_kit.dart';
 import '../widgets/_widgets.dart';
 
 class StickerDetail extends StatelessWidget {
-  StickerDetail({super.key});
-  final sticker = AppData.stickers[0];
+  StickerDetail({super.key, required this.sticker});
+  final Sticker sticker;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +38,16 @@ class StickerDetail extends StatelessWidget {
   }
 
   Widget _floatingActionButton() {
-    return FloatingActionButton(
-      elevation: 0.0,
-      backgroundColor: AppColor.accent,
-      onPressed: () {},
-      child: sticker.favorite ? const Icon(AppIcon.heart) : const Icon(AppIcon.outlinedHeart),
+    return Builder(
+      builder: (context) {
+        final favorite = context.select((StickerState state) => state.getStickerById(sticker.id).favorite);
+        return FloatingActionButton(
+          elevation: 0.0,
+          backgroundColor: AppColor.accent,
+          onPressed: () => context.read<StickerState>().onAddRemoveFavoriteTap(sticker.id),
+          child: favorite ? const Icon(AppIcon.heart) : const Icon(AppIcon.outlinedHeart),
+        );
+      }
     );
   }
 
@@ -101,11 +108,16 @@ class StickerDetail extends StatelessWidget {
                                 style: Theme.of(context).textTheme.displayLarge?.copyWith(color: AppColor.accent),
                               ),
                               CounterButton(
-                                onIncrementTap: () {},
-                                onDecrementTap: () {},
-                                label: Text(
-                                  sticker.quantity.toString(),
-                                  style: Theme.of(context).textTheme.displayLarge,
+                                onIncrementTap: () => context.read<StickerState>().onIncreaseQuantityTap(sticker.id),
+                                onDecrementTap: () => context.read<StickerState>().onDecreaseQuantityTap(sticker.id),
+                                label: Builder(
+                                  builder: (context) {
+                                    final quantity = context.select((StickerState state) => state.getStickerById(sticker.id).quantity);
+                                    return Text(
+                                      quantity.toString(),
+                                      style: Theme.of(context).textTheme.displayLarge,
+                                    );
+                                  }
                                 ),
                               )
                             ],
@@ -127,7 +139,7 @@ class StickerDetail extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 30),
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () => context.read<StickerState>().onAddToCartTap(sticker.id),
                                 child: const Text("Add to cart"),
                               ),
                             ),

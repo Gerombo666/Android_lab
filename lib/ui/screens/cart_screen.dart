@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:sun_stickers/states/sticker_state.dart';
 
 import '../../data/_data.dart';
 import '../../ui_kit/_ui_kit.dart';
@@ -7,19 +9,23 @@ import '../_ui.dart';
 
 class CartScreen extends StatelessWidget {
   CartScreen({super.key});
-  var cartItems = AppData.cartItems;
   double taxes = 5.0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(context),
-      body: EmptyWrapper(
-        title: "Empty cart",
-        isEmpty: cartItems.isEmpty,
-        child: _cartListView(context),
-      ),
-      bottomNavigationBar: cartItems.isEmpty? const SizedBox.shrink() : _bottomAppBar(context),
+    return Builder(
+      builder: (context) {
+        final cartItems = context.select((StickerState state) => state.cart);
+        return Scaffold(
+          appBar: _appBar(context),
+          body: EmptyWrapper(
+            title: "Empty cart",
+            isEmpty: cartItems.isEmpty,
+            child: _cartListView(context),
+          ),
+          bottomNavigationBar: cartItems.isEmpty? const SizedBox.shrink() : _bottomAppBar(context),
+        );
+      }
     );
   }
 
@@ -33,6 +39,7 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _cartListView(BuildContext context) {
+    final cartItems = context.select((StickerState state) => state.cart);
     return ListView.separated(
       padding: const EdgeInsets.all(30),
       itemCount: cartItems.length,
@@ -43,6 +50,7 @@ class CartScreen extends StatelessWidget {
           onDismissed: (direction) {
             if (direction == DismissDirection.endToStart) {
               print('Удаляем');
+              context.read<StickerState>().onRemoveFromCartTap(sticker.id);
             }
           },
           key: UniqueKey(),
@@ -92,12 +100,8 @@ class CartScreen extends StatelessWidget {
                 Column(
                   children: [
                     CounterButton(
-                      onIncrementTap: () {
-                        print('Увеличить количество');
-                      },
-                      onDecrementTap: () {
-                        print('Уменьшить количество');
-                      },
+                      onIncrementTap: () => context.read<StickerState>().onIncreaseQuantityTap(sticker.id),
+                      onDecrementTap: () => context.read<StickerState>().onDecreaseQuantityTap(sticker.id),
                       size: const Size(24, 24),
                       padding: 0,
                       label: Text(
@@ -106,7 +110,7 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "\$10",
+                      "\$${context.read<StickerState>().stickerPrice(sticker)}",
                       style: AppTextStyle.h2Style.copyWith(color: AppColor.accent),
                     )
                   ],
@@ -148,7 +152,7 @@ class CartScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.headlineSmall,
                               ),
                               Text(
-                                "\$111",
+                                "\$${context.read<StickerState>().subtotal}",
                                 style: Theme.of(context).textTheme.displayMedium,
                               ),
                             ],
@@ -185,7 +189,7 @@ class CartScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.displayMedium,
                               ),
                               Text(
-                                "\$120.0",
+                                "\$${context.read<StickerState>().subtotal + taxes}",
                                 style: AppTextStyle.h2Style.copyWith(
                                   color: AppColor.accent,
                                 ),
@@ -200,7 +204,7 @@ class CartScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () => context.read<StickerState>().onCheckOutTap(),
                               child: const Text("Checkout"),
                             ),
                           ),

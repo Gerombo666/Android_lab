@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../data/_data.dart';
+import '../../states/sticker_state.dart';
 import '../../ui_kit/_ui_kit.dart';
 import '../_ui.dart';
 
 class FavoriteScreen extends StatelessWidget {
   FavoriteScreen({super.key});
-  var favoriteItems = AppData.favoriteItems;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: EmptyWrapper(
-        type: EmptyWrapperType.favorite,
-        title: "Empty favorite",
-        isEmpty: favoriteItems.isEmpty,
-        child: _favoriteListView(context),
+      body: Builder(
+        builder: (context) {
+          final favoriteItems = context.select((StickerState state) => state.favorite);
+          return EmptyWrapper(
+            type: EmptyWrapperType.favorite,
+            title: "Empty favorite",
+            isEmpty: favoriteItems.isEmpty,
+            child: _favoriteListView(context),
+          );
+        }
       ),
     );
   }
@@ -31,6 +38,7 @@ class FavoriteScreen extends StatelessWidget {
   }
 
   Widget _favoriteListView(BuildContext context) {
+    final favoriteItems = context.select((StickerState state) => state.favorite);
     return ListView.separated(
       padding: const EdgeInsets.all(30),
       itemCount: favoriteItems.length,

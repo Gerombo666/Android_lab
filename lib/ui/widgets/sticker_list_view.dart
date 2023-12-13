@@ -14,7 +14,7 @@ class StickerListView extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('Проверяем количество стикеров которые пришли в компонент ${stickers}');
     for (var i = 0; i < stickers.length; i++) {
-      debugPrint('Имя стикера ${stickers[i].name}');
+      //debugPrint('Имя стикера ${stickers[i].name}');
     }
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
@@ -27,7 +27,7 @@ class StickerListView extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 print('Клик на карточку');
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => StickerDetail()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => StickerDetail(sticker:sticker)));
               },
               child: Container(
                 width: 160,
